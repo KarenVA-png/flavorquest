@@ -1,18 +1,27 @@
 import "./styles.css";
 import React, { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Header from "./components/Header";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import RecipeDetails from "./components/RecipeDetails";
 import Profile from "./components/Profile";
+import Navbar from "./components/Navbar";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const handleLogin = () => setIsLoggedIn(true);
+  const handleLogout = () => setIsLoggedIn(false);
+
   return (
     <div className="app">
-      <Header isLoggedIn={isLoggedIn} />
+
+      <Navbar
+        onLogout={handleLogout}
+        onLogin={handleLogin}
+        isLoggedIn={isLoggedIn}
+      />
+
       <main className="container">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -26,9 +35,8 @@ export default function App() {
                   user={{
                     name: "Karen",
                     email: "karen@example.com",
-                    favoriteCuisine: "Kenyan"
+                    favoriteCuisine: "Kenyan",
                   }}
-                  onLogout={() => setIsLoggedIn(false)}
                 />
               ) : (
                 <Navigate to="/" replace />
@@ -36,13 +44,6 @@ export default function App() {
             }
           />
         </Routes>
-        <div style={{ marginTop: "20px" }}>
-          {isLoggedIn ? (
-            <button onClick={() => setIsLoggedIn(false)}>Logout</button>
-          ) : (
-            <button onClick={() => setIsLoggedIn(true)}>Login</button>
-          )}
-        </div>
       </main>
     </div>
   );
