@@ -12,8 +12,38 @@ export default function Home() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchMeals("chicken");
+    loadDefaultRecipes();
   }, []);
+
+  async function loadDefaultRecipes() {
+    setError("");
+    setLoading(true);
+    try {
+      
+      const queries = ["chicken", "beef", "rice", "fish", "vegetable", "goat"];
+
+      
+      const requests = queries.map((q) =>
+        fetch(`${API_BASE}/search.php?s=${encodeURIComponent(q)}`).then((res) =>
+          res.json()
+        )
+      );
+
+      const results = await Promise.all(requests);
+
+      const allMeals = results.flatMap((r) => r.meals || []);
+
+      const uniqueMeals = Array.from(
+        new Map(allMeals.map((m) => [m.idMeal, m])).values()
+      );
+
+      setMeals(uniqueMeals);
+    } catch (err) {
+      setError("Failed to load recipes. Check your internet.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function fetchMeals(query) {
     setError("");
@@ -33,7 +63,9 @@ export default function Home() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold text-green-700">Find recipes with FlavorQuest</h1>
+      <h1 className="text-2xl font-bold text-green-700">
+        Find recipes with FlavorQuest
+      </h1>
       <p className="text-gray-600 mb-4">Search by ingredient or dish name</p>
 
       <SearchBar onSearch={fetchMeals} loading={loading} />
