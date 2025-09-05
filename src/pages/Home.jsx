@@ -19,10 +19,9 @@ export default function Home() {
     setError("");
     setLoading(true);
     try {
-      
+
       const queries = ["chicken", "beef", "rice", "fish", "vegetable", "goat"];
 
-      
       const requests = queries.map((q) =>
         fetch(`${API_BASE}/search.php?s=${encodeURIComponent(q)}`).then((res) =>
           res.json()

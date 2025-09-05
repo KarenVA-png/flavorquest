@@ -35,7 +35,7 @@ export default function App() {
                   user={{
                     name: "Karen",
                     email: "karen@example.com",
-                    favoriteCuisine: "Kenyan",
+                    favoriteCuisine: "chicken",
                   }}
                 />
               ) : (
